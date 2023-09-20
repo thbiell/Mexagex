@@ -8,10 +8,10 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('Home');
   };
 
+ // <LoginWithGoogle onLoginSuccess={handleLoginSuccess} />
   return (
     <View style={styles.container}>
       <LoginWithEmail onLoginSuccess={handleLoginSuccess} />
-      <LoginWithGoogle onLoginSuccess={handleLoginSuccess} />
     </View>
   );
 };
@@ -19,8 +19,6 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

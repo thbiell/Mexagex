@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ref, set } from 'firebase/database';
 import { StyleSheet, TouchableOpacity} from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { GoogleLogo } from 'phosphor-react-native';
 
 
 async function onGoogleButtonPress() {
@@ -55,7 +55,7 @@ GoogleSignin.configure({
 function renderGoogleSignInButton() {
   return (
     <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
-      <Icon name="google" size={30} color="red" />
+      <GoogleLogo  size={30} weight="bold" color="black"/>
     </TouchableOpacity>
   );
 }

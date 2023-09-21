@@ -1,51 +1,84 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import { useNavigation } from '@react-navigation/native'; // Importe useNavigation
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ref, set } from 'firebase/database';
+import { StyleSheet, TouchableOpacity} from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const LoginWithGoogle = () => {
-  // Obtenha a função de navegação usando useNavigation
-  const navigation = useNavigation();
 
-  const handleGoogleLogin = async () => {
-    try {
-      // Faça a autenticação com o Google
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
+async function onGoogleButtonPress() {
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  const { idToken } = await GoogleSignin.signIn();
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+  .then((googleCredential) => {
+    const user = userCredential.user;
+    const userUid = user.uid; // Obtenha o UID do usuário criado
 
-      // Você pode acessar as informações do usuário aqui, como userInfo.user.email, userInfo.user.name, etc.
+    // Crie um nó de usuário no Realtime Database com o UID como chave
+    const userRef = ref(database, `users/${userUid}`);
 
-      // Agora, você pode usar as informações do usuário para autenticá-lo no Firebase Realtime Database ou qualquer outro serviço necessário.
+    // Crie um objeto com os detalhes do usuário que você deseja salvar
+    const userData = {
+      name: name,
+      profileImage: selectedImage, // Salve a imagem aqui, se desejar
+      email: email, // Não é recomendado salvar a senha no banco de dados, considere remover essa linha
+      // Outros campos de dados, se necessário
+    };
 
-      // Após o login bem-sucedido, navegue para a próxima tela desejada
-      navigation.navigate('Home'); // Substitua 'Home' pelo nome da sua próxima tela.
-    } catch (error) {
-      console.error('Erro ao fazer login com o Google:', error);
-    }
-  };
+    // Salve os detalhes do usuário no Realtime Database
+    set(userRef, userData)
+      .then(() => {
+        console.log('Cadastro realizado com sucesso!');
 
+        // Adicione um atraso de 2 segundos (2000 milissegundos) antes de navegar para a tela de login
+        setTimeout(() => {
+          Alert.alert('Cadastro realizado com sucesso!');
+          navigation.navigate('Login');
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error('Erro ao salvar detalhes do usuário:', err);
+        Alert.alert('Erro ao criar usuário', err.message);
+      });
+  })
+  .catch((err) => {
+    console.error('Erro ao criar usuário:', err);
+    Alert.alert('Erro ao criar usuário', err.message);
+  });
+
+  return auth().signInWithCredential(googleCredential);
+}
+
+GoogleSignin.configure({
+  webClientId: '762711572558-eso25ngfuo9a3ncp9mpi20penne598bi.apps.googleusercontent.com',
+});
+
+function renderGoogleSignInButton() {
   return (
-    <View style={styles.container}>
-      <GoogleSigninButton
-        style={styles.googleButton}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={handleGoogleLogin}
-      />
-    </View>
+    <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
+      <Icon name="google" size={30} color="red" />
+    </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  button: {
+    width: 40, 
+    height: 40, 
+    borderRadius: 40, 
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginLeft: 10,
   },
-  googleButton: {
-    width: 192,
-    height: 48,
+  image: {
+    width: 40, 
+    height: 40,
   },
 });
 
-export default LoginWithGoogle;
+export default renderGoogleSignInButton;

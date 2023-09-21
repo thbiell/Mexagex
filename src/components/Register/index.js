@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, Touchab
 import * as ImagePicker from 'react-native-image-picker';
 import { auth, database, storage } from '../../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-const backImage = require("../../assets/backImage.png");
+const backImage = require("../../assets/backImage1.png");
 import { useNavigation } from '@react-navigation/native';
+import { ref, set } from 'firebase/database';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -14,12 +15,46 @@ const Register = () => {
   const navigation = useNavigation();
 
   const onHandleSignup = () => {
-    if (email !== '' && password !== '' && name!=='') {
-  createUserWithEmailAndPassword(auth, email, password, name, selectedImage)
-        .then(() => console.log('Signup success'))
-        .catch((err) => Alert.alert("Login error", err.message));
+    if (email !== '' && password !== '' && name !== '') {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const userUid = user.uid; // Obtenha o UID do usuário criado
+  
+          // Crie um nó de usuário no Realtime Database com o UID como chave
+          const userRef = ref(database, `users/${userUid}`);
+  
+          // Crie um objeto com os detalhes do usuário que você deseja salvar
+          const userData = {
+            name: name,
+            profileImage: selectedImage, // Salve a imagem aqui, se desejar
+            email: email, // Não é recomendado salvar a senha no banco de dados, considere remover essa linha
+            // Outros campos de dados, se necessário
+          };
+  
+          // Salve os detalhes do usuário no Realtime Database
+          set(userRef, userData)
+            .then(() => {
+              console.log('Cadastro realizado com sucesso!');
+  
+              // Adicione um atraso de 2 segundos (2000 milissegundos) antes de navegar para a tela de login
+              setTimeout(() => {
+                Alert.alert('Cadastro realizado com sucesso!');
+                navigation.navigate('Login');
+              }, 2000);
+            })
+            .catch((err) => {
+              console.error('Erro ao salvar detalhes do usuário:', err);
+              Alert.alert('Erro ao criar usuário', err.message);
+            });
+        })
+        .catch((err) => {
+          console.error('Erro ao criar usuário:', err);
+          Alert.alert('Erro ao criar usuário', err.message);
+        });
     }
   };
+  
 
   const handleImageUpload = () => {
     const options = {
@@ -47,7 +82,7 @@ const Register = () => {
           <Image source={backImage} style={styles.backImage} />
           <View style={styles.whiteSheet} />
           <SafeAreaView style={styles.form}>
-            <Text style={styles.title}>Sign Up</Text>
+            <Text style={styles.title}>Cadastre-se</Text>
             <TouchableOpacity style={styles.imageUploadButton} onPress={handleImageUpload}>
           {selectedImage ? (
             <Image
@@ -64,7 +99,7 @@ const Register = () => {
             
             <TextInput
             style={styles.input}
-            placeholder="Enter name"
+            placeholder="Digite seu nome"
             autoCapitalize="none"
             keyboardType="email-address"
             textContentType="name"
@@ -72,9 +107,9 @@ const Register = () => {
             value={name}
             onChangeText={(text) => setName(text)}
           />
-             <TextInput
+            <TextInput
             style={styles.input}
-            placeholder="Enter email"
+            placeholder="Digite seu email"
             autoCapitalize="none"
             keyboardType="email-address"
             textContentType="emailAddress"
@@ -84,7 +119,7 @@ const Register = () => {
           />
           <TextInput
             style={styles.input}
-            placeholder="Enter password"
+            placeholder="Digite sua senha"
             autoCapitalize="none"
             autoCorrect={false}
             secureTextEntry={true}
@@ -93,12 +128,12 @@ const Register = () => {
             onChangeText={(text) => setPassword(text)}
           />
           <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
-            <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}> Sign Up</Text>
+            <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}>Cadastrar</Text>
           </TouchableOpacity>
           <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
-            <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
+            <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Já tem cadastro? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={{color: '#f57c00', fontWeight: '600', fontSize: 14}}> Log In</Text>
+              <Text style={{color: '#2F4F4F', fontWeight: '600', fontSize: 14}}> Entrar</Text>
             </TouchableOpacity>
           </View>
           </SafeAreaView>
@@ -114,7 +149,7 @@ const Register = () => {
       title: {
         fontSize: 36,
         fontWeight: 'bold',
-        color: "orange",
+        color: '#2F4F4F',
         alignSelf: "center",
         paddingBottom: 24,
       },
@@ -132,7 +167,7 @@ const Register = () => {
       imagePlaceholder: {
         width: 100,
         height: 100,
-        backgroundColor: 'gray',
+        backgroundColor: '#2F4F4F',
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
@@ -154,7 +189,7 @@ const Register = () => {
       },
       whiteSheet: {
         width: '100%',
-        height: '75%',
+        height: '72%',
         position: "absolute",
         bottom: 0,
         backgroundColor: '#fff',
@@ -166,7 +201,7 @@ const Register = () => {
         marginHorizontal: 30,
       },
       button: {
-        backgroundColor: '#f57c00',
+        backgroundColor: '#2F4F4F',
         height: 58,
         borderRadius: 10,
         justifyContent: 'center',

@@ -1,70 +1,71 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ref, set } from 'firebase/database';
-import { StyleSheet, TouchableOpacity} from 'react-native';
+import React from 'react';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GoogleLogo } from 'phosphor-react-native';
-
-
-async function onGoogleButtonPress() {
-  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  const { idToken } = await GoogleSignin.signIn();
-  const googleCredential = auth.GoogleAuthProvider.credential(idToken)
-  .then((googleCredential) => {
-    const user = userCredential.user;
-    const userUid = user.uid; // Obtenha o UID do usuário criado
-
-    // Crie um nó de usuário no Realtime Database com o UID como chave
-    const userRef = ref(database, `users/${userUid}`);
-
-    // Crie um objeto com os detalhes do usuário que você deseja salvar
-    const userData = {
-      name: name,
-      profileImage: selectedImage, // Salve a imagem aqui, se desejar
-      email: email, // Não é recomendado salvar a senha no banco de dados, considere remover essa linha
-      // Outros campos de dados, se necessário
-    };
-
-    // Salve os detalhes do usuário no Realtime Database
-    set(userRef, userData)
-      .then(() => {
-        console.log('Cadastro realizado com sucesso!');
-
-        // Adicione um atraso de 2 segundos (2000 milissegundos) antes de navegar para a tela de login
-        setTimeout(() => {
-          Alert.alert('Cadastro realizado com sucesso!');
-          navigation.navigate('Login');
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error('Erro ao salvar detalhes do usuário:', err);
-        Alert.alert('Erro ao criar usuário', err.message);
-      });
-  })
-  .catch((err) => {
-    console.error('Erro ao criar usuário:', err);
-    Alert.alert('Erro ao criar usuário', err.message);
-  });
-
-  return auth().signInWithCredential(googleCredential);
-}
+import auth from '@react-native-firebase/auth';
+import { database } from '../../../firebaseConfig';
+import { ref, set } from 'firebase/database';
+import { useNavigation } from '@react-navigation/native';
 
 GoogleSignin.configure({
   webClientId: '762711572558-eso25ngfuo9a3ncp9mpi20penne598bi.apps.googleusercontent.com',
 });
 
-function renderGoogleSignInButton() {
+function RenderGoogleSignInButton() {
+  const navigation = useNavigation(); 
+  async function onGoogleButtonPress() {
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      const result = await auth().signInWithCredential(googleCredential);
+
+      if (result.user) {
+        const { displayName, photoURL, uid, email } = result.user;
+
+        if (!(displayName || photoURL)) {
+          throw new Error('Missing information from Google Account.');
+        }
+
+        const userRef = ref(database, `users/${uid}`);
+        const userData = {
+          name: displayName,
+          profileImage: photoURL,
+          email: email.split('@')[0],
+        };
+
+        set(userRef, userData)
+          .then(() => {
+            console.log('Cadastro realizado com sucesso!');
+            setTimeout(() => {
+              Alert.alert('Cadastro realizado com sucesso!');
+              navigation.navigate('Home');
+            }, 1000);
+          })
+          .catch((err) => {
+            console.error('Erro ao salvar detalhes do usuário:', err);
+            Alert.alert('Erro ao criar usuário', err.message);
+          });
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login com o Google:', error);
+      Alert.alert('Erro ao fazer login com o Google', error.message);
+    }
+  }
+
   return (
     <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
-      <GoogleLogo  size={30} weight="bold" color="black"/>
+      <Icon name="google" size={20} color="black" />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 40, 
-    height: 40, 
-    borderRadius: 40, 
+    width: 30,
+    height: 30,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
@@ -76,9 +77,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   image: {
-    width: 40, 
-    height: 40,
+    width: 20,
+    height: 20,
   },
 });
 
-export default renderGoogleSignInButton;
+export default RenderGoogleSignInButton;

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, Touchab
 import * as ImagePicker from 'react-native-image-picker';
 import { auth, database, storage } from '../../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-const backImage = require("../../assets/backImage1.png");
+const backImage = require("../../assets/logo6.png");
 import { useNavigation } from '@react-navigation/native';
 import { ref, set } from 'firebase/database';
 
@@ -41,7 +41,7 @@ const Register = () => {
               setTimeout(() => {
                 Alert.alert('Cadastro realizado com sucesso!');
                 navigation.navigate('Login');
-              }, 2000);
+              }, 1000);
             })
             .catch((err) => {
               console.error('Erro ao salvar detalhes do usuário:', err);
@@ -79,24 +79,25 @@ const Register = () => {
   
       return (
         <View style={styles.container}>
-          <Image source={backImage} style={styles.backImage} />
-          <View style={styles.whiteSheet} />
-          <SafeAreaView style={styles.form}>
-            <Text style={styles.title}>Cadastre-se</Text>
-            <TouchableOpacity style={styles.imageUploadButton} onPress={handleImageUpload}>
-          {selectedImage ? (
-            <Image
-              source={{ uri: selectedImage }}
-              style={styles.profileImage}
-              resizeMode="cover"
-            />
-          ) : (
-            <View style={styles.imagePlaceholder}>
-              <Text style={{ color: 'white' }}>Adicionar Foto</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-            
+        <Image source={backImage} style={styles.backImage} />
+        <View style={styles.whiteSheet} />
+        <SafeAreaView style={styles.form}>  
+        <View style={styles.subContainer}>       
+          <TouchableOpacity style={styles.imageUploadButton} onPress={handleImageUpload}>
+        {selectedImage ? (
+          <Image
+            source={{ uri: selectedImage }}
+            style={styles.profileImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={styles.imagePlaceholder}>
+            <Text style={{ color: 'white' }}>Adicionar Foto</Text>
+          </View>
+        )}
+      </TouchableOpacity>
+      <Text style={styles.title}>Cadastre-se!</Text>
+      </View> 
             <TextInput
             style={styles.input}
             placeholder="Digite seu nome"
@@ -131,14 +132,15 @@ const Register = () => {
             <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}>Cadastrar</Text>
           </TouchableOpacity>
           <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
-            <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Já tem cadastro? </Text>
+            <Text style={{color: '#000', fontWeight: '600', fontSize: 14}}>Já tem cadastro? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={{color: '#2F4F4F', fontWeight: '600', fontSize: 14}}> Entrar</Text>
+              <Text style={{color: '#FF4500', fontWeight: '600', fontSize: 14}}> Entrar</Text>
             </TouchableOpacity>
           </View>
           </SafeAreaView>
           <StatusBar barStyle="light-content" />
         </View>
+
       );
     }
     const styles = StyleSheet.create({
@@ -149,13 +151,17 @@ const Register = () => {
       title: {
         fontSize: 36,
         fontWeight: 'bold',
-        color: '#2F4F4F',
-        alignSelf: "center",
+        color: '#FF4500',
+        alignSelf: "flex-end",
         paddingBottom: 24,
       },
       imageUploadButton: {
         alignItems: 'flex-start',
-        marginBottom: 20,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
       },
     
       profileImage: {
@@ -163,11 +169,17 @@ const Register = () => {
         height: 100,
         borderRadius: 50,
       },
+      subContainer: {
+        flexDirection:'row',
+        marginTop: 100,
+        marginBottom: 20,
+        justifyContent: 'space-between',
+      },
     
       imagePlaceholder: {
         width: 100,
         height: 100,
-        backgroundColor: '#2F4F4F',
+        backgroundColor: '#FF4500',
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
@@ -184,7 +196,7 @@ const Register = () => {
         width: "100%",
         height: 340,
         position: "absolute",
-        top: 0,
+        top:-40,
         resizeMode: 'cover',
       },
       whiteSheet: {
@@ -201,7 +213,7 @@ const Register = () => {
         marginHorizontal: 30,
       },
       button: {
-        backgroundColor: '#2F4F4F',
+        backgroundColor: '#FF4500',
         height: 58,
         borderRadius: 10,
         justifyContent: 'center',

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import LoginWithGoogle from '../LoginWithGoogle'
 
 
-const backImage = require("../../assets/backImage1.png");
+const backImage = require("../../assets/logo6.png");
 const LoginWithEmail = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,8 +14,17 @@ const LoginWithEmail = () => {
   const onHandleLogin = () => {
     if (email !== "" && password !== "") {
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => console.log("Login success"))
-        .catch((err) => Alert.alert("Login error", err.message));
+      .then(() => {
+        console.log('Login realizado com sucesso!');
+        setTimeout(() => {
+          Alert.alert('Login realizado com sucesso!');
+          navigation.navigate('Home');
+        }, 1000);
+      })
+      .catch((err) => {
+        console.error('Erro ao fazer login:', err);
+        Alert.alert('Erro ao fazer login', err.message);
+      });
     }
   };
   
@@ -49,9 +58,9 @@ const LoginWithEmail = () => {
         <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}>Entrar</Text>
       </TouchableOpacity>
       <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
-        <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Não possui cadastro? </Text>
+        <Text style={{color: 'black', fontWeight: '600', fontSize: 14}}>Não possui cadastro? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={{color: '#2F4F4F', fontWeight: '600', fontSize: 14}}> Cadastrar-se</Text>
+          <Text style={{color: '#FF4500', fontWeight: '600', fontSize: 14}}> Cadastrar-se</Text>
         </TouchableOpacity>
         <LoginWithGoogle/>
       </View>
@@ -67,8 +76,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 36,
+    marginTop:30,
     fontWeight: 'bold',
-    color: '#2F4F4F',
+    color: '#FF4500',
     alignSelf: "center",
     paddingBottom: 24,
   },
@@ -84,7 +94,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 340,
     position: "absolute",
-    top: 0,
+    top: -40,
     resizeMode: 'cover',
   },
   whiteSheet: {
@@ -101,7 +111,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    backgroundColor: '#2F4F4F',
+    backgroundColor: '#FF4500',
     height: 58,
     borderRadius: 10,
     justifyContent: 'center',

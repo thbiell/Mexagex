@@ -1,17 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import LoginWithEmail from '../../components/LoginWithEmail';
-import LoginWithGoogle from '../../components/LoginWithGoogle';
 
-const LoginScreen = ({ navigation }) => {
-  const handleLoginSuccess = () => {
-    navigation.navigate('Home');
-  };
+const LoginScreen = () => {
+  
 
- // <LoginWithGoogle onLoginSuccess={handleLoginSuccess} />
   return (
     <View style={styles.container}>
-      <LoginWithEmail onLoginSuccess={handleLoginSuccess} />
+      <LoginWithEmail/>
     </View>
   );
 };

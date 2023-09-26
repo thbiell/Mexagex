@@ -149,9 +149,11 @@ const Register = () => {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
+        
         <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
           <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>Cadastrar</Text>
         </TouchableOpacity>
+
         <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
           <Text style={{ color: '#000', fontWeight: '600', fontSize: 14 }}>Já tem cadastro? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>

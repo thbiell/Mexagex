@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth, database } from '../../../firebaseConfig';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 const Home = () => {
   const [userProfileImage, setUserProfileImage] = useState(null);
@@ -32,7 +34,7 @@ const Home = () => {
         setUsername(userData.name);
       }
     });
-    
+
 
     // Carregue a lista de conversas do usuário do Realtime Database
     //const conversationsRef = database.ref(`users/${userUid}/conversations`);
@@ -49,15 +51,29 @@ const Home = () => {
   const navigateToChat = (conversationId) => {
     navigation.navigate('Chat', { conversationId });
   };
-
+//colors={['#5FFBF1', '#00e4ff', '#44a4ff', '#c957ce', '#c348b5', '#cb3aab', '#d3279f', '#d90092', '#ea0074', '#f11256', '#f03737', '#e75312']}
   return (
-    <View>
+    <View style={styles.container}>
       {/* Cabeçalho com a imagem de perfil */}
-      <View>
-        
-          <Image source={{ uri: userProfileImage }} style={{ width: 50, height: 50, borderRadius: 25 }} />
-        
-          <Text style={{ marginLeft: 10, color:'black' }}>{userName}</Text>
+      <View >
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={['#D16BA5', '#86A8E7', '#5FFBF1']}
+          style={styles.linearGradient}
+        >
+          <View style={styles.image}>
+            <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
+            <Text style={styles.textProfileName}>
+              {userName}
+            </Text>
+          </View>
+          <Text style={styles.textTitle}>
+            Mexagex
+          </Text>
+        </LinearGradient>
+
+
       </View>
 
       {/* Lista de conversas */}
@@ -74,5 +90,40 @@ const Home = () => {
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  linearGradient: {
+    borderBottomLeftRadius: 60,
+    flexDirection: 'row-reverse'
+  },
+  profileImage: {
+    marginTop: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'black',
+    marginRight: 20,
+  },
+  textProfileName: {
+    color: 'pink',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 10,
+    marginRight: 10,
+  },
+  textTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 10,
+    marginLeft: 10,
+    alignItems: 'flex-start'
+  },
+  image: {
+    alignItems: 'flex-end',
+  },
+})
 export default Home;

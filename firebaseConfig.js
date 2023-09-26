@@ -3,7 +3,8 @@ import firebase from 'firebase/compat/app';
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "@firebase/database";
 import { getStorage } from "firebase/storage";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+//import storage from '@react-native-firebase/storage';
+
 import {
   initializeAuth,
   getReactNativePersistence,

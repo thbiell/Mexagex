@@ -12,7 +12,7 @@ GoogleSignin.configure({
 });
 
 function RenderGoogleSignInButton() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   async function onGoogleButtonPress() {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -28,20 +28,19 @@ function RenderGoogleSignInButton() {
           throw new Error('Missing information from Google Account.');
         }
 
-        const userRef = ref(database, `users/${uid}`);
+
+        const userRef = database.ref(`users/${uid}`);
         const userData = {
           name: displayName,
           profileImage: photoURL,
-          email: email.split('@')[0],
+          email: email,
         };
 
         set(userRef, userData)
           .then(() => {
             console.log('Cadastro realizado com sucesso!');
-            setTimeout(() => {
-              Alert.alert('Cadastro realizado com sucesso!');
-              navigation.navigate('Home');
-            }, 1000);
+            Alert.alert('Cadastro realizado com sucesso!');
+            navigation.navigate('Home');
           })
           .catch((err) => {
             console.error('Erro ao salvar detalhes do usuário:', err);

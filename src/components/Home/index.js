@@ -59,7 +59,7 @@ const Home = () => {
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={['#D16BA5', '#86A8E7', '#5FFBF1']}
+          colors={['#5FFBF1', '#00e4ff', '#44a4ff', '#c957ce', '#c348b5', '#cb3aab', '#d3279f', '#d90092', '#ea0074', '#f11256', '#f03737', '#e75312']}
           style={styles.linearGradient}
         >
           <View style={styles.image}>

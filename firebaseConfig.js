@@ -1,17 +1,10 @@
-import { initializeApp } from "firebase/app";
-import firebase from 'firebase/compat/app';
-import { getAuth } from "firebase/auth";
-import { getDatabase } from "@firebase/database";
-import { getStorage } from "firebase/storage";
-//import storage from '@react-native-firebase/storage';
+import { AppRegistry } from 'react-native';
+import { initializeApp } from '@react-native-firebase/app';
+import { getAuth } from '@react-native-firebase/auth';
+import { getDatabase } from '@react-native-firebase/database';
+import { getStorage } from '@react-native-firebase/storage';
 
-import {
-  initializeAuth,
-  getReactNativePersistence,
-} from "firebase/auth";
 
-import 'firebase/compat/auth';
-import 'firebase/compat/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNPOtZklfn_BQOmnggvss2DjQW_IjZScg",
@@ -23,10 +16,13 @@ const firebaseConfig = {
   appId: "1:762711572558:android:0a1448440bb14867fb431f",
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const database = firebase.database();
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app); 
+// Inicialize o Firebase com a configuração
+const firebaseApp = initializeApp(firebaseConfig);
 
-export { auth, database, storage, firebase };
+// Obtenha as instâncias do Firebase que você deseja usar
+const auth = getAuth(firebaseApp);
+const database = getDatabase(firebaseApp);
+const storage = getStorage(firebaseApp);
+
+// Agora você pode exportar essas instâncias para uso em todo o seu aplicativo
+export { auth, database, storage };

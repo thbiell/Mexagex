@@ -3,10 +3,11 @@ import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import { database } from '../../../firebaseConfig';
-import { ref, set } from 'firebase/database';
+import { ref, set, getDatabase } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
 
+
+const database = getDatabase();
 GoogleSignin.configure({
   webClientId: '762711572558-eso25ngfuo9a3ncp9mpi20penne598bi.apps.googleusercontent.com',
 });

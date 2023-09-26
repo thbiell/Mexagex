@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
-import { auth, database, storage } from '../../../firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {  storage } from '../../../firebaseConfig'; // Essa linha deve ser atualizada
+import { getAuth, createUserWithEmailAndPassword } from '@react-native-firebase/auth'; // Import do Firebase Auth para o React Native
 const backImage = require("../../assets/logo6.png");
 import { useNavigation } from '@react-navigation/native';
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { ref, getDownloadURL, putFile } from '@react-native-firebase/storage'; // Import do Firebase Storage para o React Native
 import * as ImagePicker from 'react-native-image-picker';
-import { set } from 'firebase/database';
+import { set, getDatabase} from '@react-native-firebase/database';
 
-const defaultImageUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fdigimedia.web.ua.pt%2Fdefault-user-image&psig=AOvVaw0GNRaKarl0LUYuUSVXlYq-&ust=1695752585175000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCJCto8mwxoEDFQAAAAAdAAAAABAE';
+
+
+// Import do Firebase Realtime Database para o React Native
+const auth = getAuth(); // Obtém uma instância de autenticação
+const database = getDatabase();
+const defaultImageUrl = 'https://as2.ftcdn.net/v2/jpg/03/31/69/91/1000_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg';
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,8 +42,8 @@ const Register = () => {
           const filename = uri.substring(uri.lastIndexOf('/') + 1);
           const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
           const storageRef = ref(storage, `users/${uid}/${filename}`);
-          //console.log('storageRef', storageRef)
-          await uploadBytes(storageRef, uploadUri);
+          console.log('storageRef', storageRef)
+          await putFile(storageRef, uploadUri);
           imageUrl = await getDownloadURL(storageRef);
           console.log('Imagem enviada com sucesso:', imageUrl);
         }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { StyleSheet, Text, View, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
+import { signInWithEmailAndPassword } from "@react-native-firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import LoginWithGoogle from '../LoginWithGoogle'

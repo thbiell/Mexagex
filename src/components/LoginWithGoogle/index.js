@@ -3,8 +3,10 @@ import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import { ref, set, getDatabase } from '@react-native-firebase/database';
+import { ref, set, getDatabase, once } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
+
+
 
 
 const database = getDatabase();
@@ -19,34 +21,33 @@ function RenderGoogleSignInButton() {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const { idToken } = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
+  
       const result = await auth().signInWithCredential(googleCredential);
-
+  
       if (result.user) {
         const { displayName, photoURL, uid, email } = result.user;
-
+  
         if (!(displayName || photoURL)) {
           throw new Error('Missing information from Google Account.');
         }
-
-
+  
         const userRef = database.ref(`users/${uid}`);
-        const userData = {
-          name: displayName,
-          profileImage: photoURL,
-          email: email,
-        };
-
-        set(userRef, userData)
-          .then(() => {
-            console.log('Cadastro realizado com sucesso!');
-            Alert.alert('Cadastro realizado com sucesso!');
-            navigation.navigate('Home');
-          })
-          .catch((err) => {
-            console.error('Erro ao salvar detalhes do usuário:', err);
-            Alert.alert('Erro ao criar usuário', err.message);
-          });
+  
+        // Verifique se o usuário já existe no banco de dados
+        const snapshot = await userRef.once('value');
+        if (!snapshot.exists()) {
+          // Se o usuário não existe, crie um novo registro
+          const userData = {
+            name: displayName,
+            profileImage: photoURL,
+            email: email,
+          };
+          await set(userRef, userData);
+        }
+  
+        console.log('Login realizado com sucesso!');
+        Alert.alert('Login realizado com sucesso!');
+        navigation.navigate('Home');
       }
     } catch (error) {
       console.error('Erro ao fazer login com o Google:', error);

@@ -157,7 +157,7 @@ const Register = () => {
         <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
           <Text style={{ color: '#000', fontWeight: '600', fontSize: 14 }}>Já tem cadastro? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={{ color: '#FF4500', fontWeight: '600', fontSize: 14 }}> Entrar</Text>
+            <Text style={{ color: '#6727E8', fontWeight: '600', fontSize: 14 }}> Entrar</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#1B0A3E',
     alignSelf: "flex-end",
     paddingBottom: 24,
   },
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 100,
     height: 100,
-    backgroundColor: '#FF4500',
+    backgroundColor: '#1B0A3E',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#1B0A3E',
     height: 58,
     borderRadius: 10,
     justifyContent: 'center',

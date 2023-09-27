@@ -117,7 +117,7 @@ const Profile = () => {
                 />
             </View>
                 <TouchableOpacity style={styles.button} onPress={() => onHandleUpdate(auth.currentUser.uid)} >
-                    <Text style={styles.profileImage} >
+                    <Text style={styles.textButton} >
                         Atualizar perfil
                     </Text>
                 </TouchableOpacity>
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+        
     },
     header: {
         alignItems: 'center',
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     },
     form: {
         marginTop: 40,
+        marginHorizontal:25
     },
     input: {
         backgroundColor: 'white',
@@ -160,12 +162,18 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: '#FF4500',
+        backgroundColor: '#A2197F',
         height: 58,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
+        marginHorizontal:25
+    },
+    textButton:{
+        fontWeight: 'bold', 
+        color: '#000', 
+        fontSize: 18
     },
 
 });

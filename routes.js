@@ -18,7 +18,7 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Home"
       shifting={true} // Define isso como true para alternar entre os ícones e os rótulos na barra inferior
-      activeColor="#FF4500" // Define a cor do item ativo
+      activeColor="#1B0A3E" // Define a cor do item ativo
       inactiveColor="#000" // Define a cor do item inativo
       barStyle={{ backgroundColor: '#fff' }} // Define a cor de fundo da barra inferior
     >

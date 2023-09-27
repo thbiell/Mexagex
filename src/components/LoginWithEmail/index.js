@@ -72,7 +72,7 @@ const LoginWithEmail = () => {
         <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
           <Text style={{ color: 'black', fontWeight: '600', fontSize: 14 }}>Não possui cadastro? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={{ color: '#FF4500', fontWeight: '600', fontSize: 14 }}> Cadastrar-se</Text>
+            <Text style={{ color: '#1B0A3E', fontWeight: '600', fontSize: 14 }}> Cadastrar-se</Text>
           </TouchableOpacity>
           <LoginWithGoogle />
         </View>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginTop: 30,
     fontWeight: 'bold',
-    color: '#FF4500',
+    color: '#1B0A3E',
     alignSelf: "center",
     paddingBottom: 24,
   },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#1B0A3E',
     height: 58,
     borderRadius: 10,
     justifyContent: 'center',

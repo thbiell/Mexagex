@@ -74,7 +74,7 @@ const Config = () => {
       </View>
       {/* Ícone de logout como botão */}
       <TouchableOpacity onPress={handleLogout}>
-        <Icon name="exit-to-app" size={36} color="#FF4500" />
+        <Icon name="exit-to-app" size={36} color="#1B0A3E" />
       </TouchableOpacity>
     </View>
   );

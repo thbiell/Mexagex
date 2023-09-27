@@ -72,7 +72,7 @@ const LoginWithEmail = () => {
         <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
           <Text style={{ color: 'black', fontWeight: '600', fontSize: 14 }}>Não possui cadastro? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={{ color: '#1B0A3E', fontWeight: '600', fontSize: 14 }}> Cadastrar-se</Text>
+            <Text style={{ color: '#6727E8', fontWeight: '600', fontSize: 14 }}> Cadastrar-se</Text>
           </TouchableOpacity>
           <LoginWithGoogle />
         </View>

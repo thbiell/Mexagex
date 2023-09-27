@@ -9,6 +9,7 @@ import LoginScreen from "./src/pages/Login"
 import HomeScreen from "./src/pages/Home"
 import ProfileScreen from "./src/pages/Profile"
 import ConfigScreen from "./src/pages/Config"
+import ContactsScreen from "./src/pages/Contacts"
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -34,7 +35,7 @@ const MainTabNavigator = () => {
       />
       <Tab.Screen
         name="Contacts"
-        component={ProfileScreen}
+        component={ContactsScreen}
         options={{
           tabBarLabel: 'Contatos',
           tabBarIcon: ({ color }) => (

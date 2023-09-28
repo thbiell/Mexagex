@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { auth, database } from '../../../firebaseConfig';
 import useConversationStore from '../../../reducer';
 import { format } from 'date-fns';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const Chat = () => {
   const conversationId = useConversationStore((state) => state.conversationId);
+  const [userProfileImage, setUserProfileImage] = useState(null);
+  const [userName, setUsername] = useState('');
   if (!conversationId) {
     return (
       <View>
@@ -38,6 +41,41 @@ const Chat = () => {
       messagesRef.off(); // Parar de ouvir as alterações
     };
   }, [conversationId]);
+  useEffect(() => {
+    // Verifique se o UID do usuário está disponível no módulo de autenticação
+    //const userUid = (`auth.currentUser.${uid}`);
+    const uid = auth.currentUser.uid;
+    console.log(uid)
+    if (!uid) {
+      // Lidar com a situação em que o UID do usuário não está disponível
+      console.error('UID do usuário não encontrado.');
+      return;
+    }
+
+    // Carregue os dados do usuário (imagem de perfil) do Realtime Database
+    const userRef = database.ref(`users/${uid}`);
+
+
+    userRef.on('value', (snapshot) => {
+      const userData = snapshot.val();
+      //console.log('userData:', userData); // Verifique se userData.profileImage está correto
+      if (userData && userData.profileImage && userData.name) {
+        setUserProfileImage(userData.profileImage);
+        setUsername(userData.name);
+      }
+    });
+
+
+    // Carregue a lista de conversas do usuário do Realtime Database
+    //const conversationsRef = database.ref(`users/${userUid}/conversations`);
+    //conversationsRef.on('value', (snapshot) => {
+    //  const conversationsData = snapshot.val();
+    //  if (conversationsData) {
+    //    const conversationsArray = Object.values(conversationsData);
+    //    setConversations(conversationsArray);
+    //  }
+    //});
+  }, []);
 
   const handleSend = () => {
     // Enviar a nova mensagem para a conversa
@@ -68,6 +106,15 @@ const Chat = () => {
 
   return (
     <View style={styles.container}>
+        <View style={styles.linearGradient}>
+        <Icon name="arrow-left-long" color={'black'} size={23} style={styles.inputIcon} />
+        <View style={styles.image}>
+          <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
+          <Text style={styles.textProfileName}>
+            {userName}
+          </Text>
+        </View>
+      </View>
       <FlatList
         data={messages}
         keyExtractor={(item) => item.timestamp.toString()}
@@ -134,6 +181,32 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     marginLeft: 8,
+  },
+  linearGradient: {
+    borderBottomLeftRadius: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#1B0A3E',
+    padding: 8,
+  },
+  profileImage: {
+    marginTop: 15,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'black',
+    marginRight: 20,
+  },
+  textProfileName: {
+    color: '#F10808',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 10,
+  },
+  image: {
+    alignItems: 'flex-end',
   },
 });
 

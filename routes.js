@@ -73,7 +73,7 @@ const Routes = () => {
       <Stack.Screen name={"Register"} component={RegisterScreen} options={{ headerShown: false }} />
       <Stack.Screen name={"Login"} component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen name={"MainTabNavigator"} component={MainTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name={"Chat"} component={ChatScreen} />
+      <Stack.Screen name={"Chat"} component={ChatScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };

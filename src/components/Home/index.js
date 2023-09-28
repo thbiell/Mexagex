@@ -3,7 +3,7 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react
 import { useNavigation } from '@react-navigation/native';
 import { auth, database } from '../../../firebaseConfig';
 const backImage = require("../../assets/logoW.png");
-
+import useConversationStore from '../../../reducer';
 
 
 const Home = () => {

@@ -3,7 +3,7 @@ import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, A
 import { auth, database } from '../../../firebaseConfig';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-
+import useConversationStore from '../../../reducer';
 
 
 
@@ -116,22 +116,39 @@ const Contacts = () => {
           const friendUid = Object.keys(userData)[0];
   
           // Gere um ID único para a conversa
-          const conversationId = `${currentUid}${friendUid}`;
-          console.log(conversationId)
-          console.log(friendUid)
-          // Verifique se a conversa já existe
-          const conversationRef = database.ref(`conversations/${conversationId}`);
-          const conversationSnapshot = await conversationRef.once('value');
-          
-          if (!conversationSnapshot.exists()) {
-            // Se a conversa não existir, crie-a
+          const conversationId1 = `${currentUid}${friendUid}`;
+          const conversationId2 = `${friendUid}${currentUid}`;
+  
+          // Verifique se a conversa já existe com os dois possíveis IDs
+          const conversationRef1 = database.ref(`conversations/${conversationId1}`);
+          const conversationSnapshot1 = await conversationRef1.once('value');
+  
+          const conversationRef2 = database.ref(`conversations/${conversationId2}`);
+          const conversationSnapshot2 = await conversationRef2.once('value');
+  
+          let existingConversationId = null;
+  
+          if (conversationSnapshot1.exists()) {
+            existingConversationId = conversationId1;
+          } else if (conversationSnapshot2.exists()) {
+            existingConversationId = conversationId2;
+          }
+  
+          if (existingConversationId) {
+            // Já existe uma conversa, vá para ela
+            useConversationStore.setState({ conversationId: existingConversationId });
+            navigation.navigate("Chat");
+          } else {
+            // Crie uma nova conversa
+            const conversationRef = database.ref(`conversations/${conversationId1}`);
             conversationRef.set({
               participants: [currentUid, friendUid], // Adicione os participantes da conversa
             });
-          }
   
-          // Agora você pode navegar para a tela de chat com o ID da conversa
-          navigation.navigate("Chat", { conversationId });
+            // Vá para a nova conversa
+            useConversationStore.setState({ conversationId: conversationId1 });
+            navigation.navigate("Chat");
+          }
         } else {
           // Não encontrou nenhum usuário com o email selecionado
           console.log('Não foi possível encontrar o usuário com o email selecionado.');
@@ -142,7 +159,6 @@ const Contacts = () => {
         console.error('Erro ao verificar o email:', error);
       });
   };
-  
   
   return (
     <View style={styles.container}>

@@ -1,8 +1,8 @@
 import {create} from 'zustand';
 
-const useAuthStore = create((set) => ({
-  uid: null, 
-  setUid: (newUid) => set({ uid: newUid }),
+const useConversationStore = create((set) => ({
+  conversationId: null,
+  setConversationId: (id) => set({ conversationId: id }),
 }));
 
-export default useAuthStore;
+export default useConversationStore;

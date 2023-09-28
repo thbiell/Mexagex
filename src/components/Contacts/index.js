@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { auth, database } from '../../../firebaseConfig';
-import Icon from 'react-native-vector-icons/Feather'; 
+import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
+
+
+
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [searchEmail, setSearchEmail] = useState('');
   const [newFriendEmail, setNewFriendEmail] = useState('');
   const [filteredContacts, setFilteredContacts] = useState([]);
+  const navigation = useNavigation();
+
+
 
   useEffect(() => {
-    // Recupere a lista de amigos do banco de dados Firebase
     const uid = auth.currentUser.uid;
     const friendsRef = database.ref(`users/${uid}/friends`);
 
     friendsRef.on('value', async (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Converta os dados em um array de contatos
         const contactList = Object.values(data);
-
-        // Busque informações adicionais (nome e foto) para cada amigo
         const contactsWithDetails = await Promise.all(contactList.map(async (contact) => {
           const userSnapshot = await database.ref('users')
             .orderByChild('email')
@@ -32,28 +35,24 @@ const Contacts = () => {
             return {
               ...contact,
               uid: { uid },
-              name: user.name, // Substitua 'name' pelo nome correto no seu banco de dados
-              photoURL: user.profileImage, // Substitua 'profileImage' pelo nome correto no seu banco de dados
+              name: user.name,
+              photoURL: user.profileImage,
             };
           }
           return contact;
         }));
 
         setContacts(contactsWithDetails);
-        setFilteredContacts(contactsWithDetails); // Inicialmente, os contatos filtrados são os mesmos que os contatos totais
+        setFilteredContacts(contactsWithDetails);
       }
     });
   }, []);
 
-  // Função para adicionar um novo amigo
   const addFriend = () => {
     if (newFriendEmail) {
-      // Verifique se o email do novo amigo já não está na lista de contatos
       if (!contacts.some((contact) => contact.email === newFriendEmail)) {
         const currentUser = auth.currentUser;
-        const currentUid = currentUser.uid; // Obtenha o UID do usuário atual
-
-        // Verifique se o email existe em algum usuário no Realtime Database e obtenha o UID do amigo
+        const currentUid = currentUser.uid;
         database.ref('users')
           .orderByChild('email')
           .equalTo(newFriendEmail)
@@ -61,42 +60,32 @@ const Contacts = () => {
           .then((snapshot) => {
             if (snapshot.exists()) {
               const userData = snapshot.val();
-              const friendUid = Object.keys(userData)[0]; // Obtenha a primeira chave, que é o UID do amigo
-
-              // Adicione o novo amigo à lista de contatos do usuário atual
+              const friendUid = Object.keys(userData)[0];
               const userRef = database.ref(`users/${currentUid}`);
               const newFriendRef = userRef.child('friends').push();
-              newFriendRef.set({ email: newFriendEmail, uid: friendUid }); // Use o UID do novo amigo
-
-              // Adicione o usuário atual à lista de contatos do novo amigo
+              newFriendRef.set({ email: newFriendEmail, uid: friendUid });
               const friendRef = database.ref(`users/${friendUid}`);
               const newFriendForFriendRef = friendRef.child('friends').push();
-              newFriendForFriendRef.set({ email: currentUser.email, uid: currentUid }); // Use o UID do usuário atual
-
-              // Atualize os contatos filtrados
+              newFriendForFriendRef.set({ email: currentUser.email, uid: currentUid });
               setFilteredContacts((prevFilteredContacts) => [
                 ...prevFilteredContacts,
-                { email: newFriendEmail, uid: friendUid }, // Use o UID do novo amigo
+                { email: newFriendEmail, uid: friendUid },
               ]);
             } else {
-              // O email do amigo não existe no Realtime Database
               console.log('Este email não pertence a nenhum usuário.');
               Alert.alert('Este email não pertence a nenhum usuário.');
-              // Você pode exibir um alerta ou mensagem informando que o email não existe
             }
           })
           .catch((error) => {
             console.error('Erro ao verificar o email:', error);
           });
       } else {
-        // O amigo já está na lista de contatos
         console.log('Este amigo já está na sua lista de contatos.');
         Alert.alert('Este amigo já está na sua lista de contatos.');
       }
     }
   };
 
-  // Função para filtrar os contatos com base no texto de pesquisa
   const filterContacts = (text) => {
     setSearchEmail(text);
     if (text) {
@@ -108,7 +97,53 @@ const Contacts = () => {
       setFilteredContacts(contacts);
     }
   };
-
+  const handleContactPress = async (contact) => {
+    const currentUser = auth.currentUser;
+    const currentUid = currentUser.uid;
+  
+    // Obtém o email do contato selecionado
+    const selectedContactEmail = contact.email;
+  
+    database.ref('users')
+      .orderByChild('email')
+      .equalTo(selectedContactEmail)
+      .once('value')
+      .then(async (snapshot) => {
+        const userData = snapshot.val();
+  
+        if (userData) {
+          // Encontrou o usuário com o email selecionado
+          const friendUid = Object.keys(userData)[0];
+  
+          // Gere um ID único para a conversa
+          const conversationId = `${currentUid}${friendUid}`;
+          console.log(conversationId)
+          console.log(friendUid)
+          // Verifique se a conversa já existe
+          const conversationRef = database.ref(`conversations/${conversationId}`);
+          const conversationSnapshot = await conversationRef.once('value');
+          
+          if (!conversationSnapshot.exists()) {
+            // Se a conversa não existir, crie-a
+            conversationRef.set({
+              participants: [currentUid, friendUid], // Adicione os participantes da conversa
+            });
+          }
+  
+          // Agora você pode navegar para a tela de chat com o ID da conversa
+          navigation.navigate("Chat", { conversationId });
+        } else {
+          // Não encontrou nenhum usuário com o email selecionado
+          console.log('Não foi possível encontrar o usuário com o email selecionado.');
+          Alert.alert('Não foi possível encontrar o usuário com o email selecionado.');
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao verificar o email:', error);
+      });
+  };
+  
+  
   return (
     <View style={styles.container}>
       <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', marginBottom: 20 }}>
@@ -118,20 +153,18 @@ const Contacts = () => {
         <Icon name="search" color={'black'} size={23} style={styles.inputIcon} />
         <TextInput
           placeholder="Pesquisar por email"
-          onChangeText={filterContacts} // Use a função de filtro ao digitar
+          onChangeText={filterContacts}
           value={searchEmail}
           style={styles.input}
         />
       </View>
       <FlatList
-        data={filteredContacts} // Use os contatos filtrados
+        data={filteredContacts}
         keyExtractor={(item) => item.email}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.contactItem}
-            onPress={() => {
-              // Adicione ação para lidar com a seleção de um contato
-            }}
+            onPress={() => handleContactPress(item)} 
           >
             <Image source={{ uri: item.photoURL }} style={styles.contactImage} />
             <View>
@@ -139,6 +172,7 @@ const Contacts = () => {
               <Text>{item.email}</Text>
             </View>
           </TouchableOpacity>
+
         )}
       />
       <View style={styles.inputContainer}>
@@ -179,8 +213,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: '#E4E1DD', // Cor de fundo
-    borderRadius: 8, // Borda arredondada
+    backgroundColor: '#E4E1DD',
+    borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
   },

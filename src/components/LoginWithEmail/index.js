@@ -7,7 +7,7 @@ import LoginWithGoogle from '../LoginWithGoogle'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const backImage = require("../../assets/logo6.png");
+const backImage = require("../../assets/logo.png");
 const LoginWithEmail = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +25,7 @@ const LoginWithEmail = () => {
               console.log('Login realizado com sucesso!');
 
               Alert.alert('Login realizado com sucesso!');
-              navigation.navigate('Home');
+              navigation.navigate('MainTabNavigator');
 
             })
             .catch((err) => {

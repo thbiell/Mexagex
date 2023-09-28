@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
 import {  storage } from '../../../firebaseConfig'; // Essa linha deve ser atualizada
 import { getAuth, createUserWithEmailAndPassword } from '@react-native-firebase/auth'; // Import do Firebase Auth para o React Native
-const backImage = require("../../assets/logo6.png");
+const backImage = require("../../assets/logo.png");
 import { useNavigation } from '@react-navigation/native';
 import { ref, getDownloadURL, putFile } from '@react-native-firebase/storage'; // Import do Firebase Storage para o React Native
 import * as ImagePicker from 'react-native-image-picker';

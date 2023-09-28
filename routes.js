@@ -10,6 +10,7 @@ import HomeScreen from "./src/pages/Home"
 import ProfileScreen from "./src/pages/Profile"
 import ConfigScreen from "./src/pages/Config"
 import ContactsScreen from "./src/pages/Contacts"
+import ChatScreen from "./src/pages/Chat"
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -18,10 +19,10 @@ const MainTabNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      shifting={true} // Define isso como true para alternar entre os ícones e os rótulos na barra inferior
-      activeColor="#1B0A3E" // Define a cor do item ativo
-      inactiveColor="#000" // Define a cor do item inativo
-      barStyle={{ backgroundColor: '#fff' }} // Define a cor de fundo da barra inferior
+      shifting={true} 
+      activeColor="#1B0A3E" 
+      inactiveColor="#000" 
+      barStyle={{ backgroundColor: '#fff' }} 
     >
       <Tab.Screen
         name="Home"
@@ -63,7 +64,6 @@ const MainTabNavigator = () => {
           ),
         }}
       />
-      {/* Adicione outras telas aqui */}
     </Tab.Navigator>
   );
 };
@@ -72,8 +72,8 @@ const Routes = () => {
     <Stack.Navigator initialRouteName={"Register"}>
       <Stack.Screen name={"Register"} component={RegisterScreen} options={{ headerShown: false }} />
       <Stack.Screen name={"Login"} component={LoginScreen} options={{ headerShown: false }} />
-      <Stack.Screen name={"Home"} component={MainTabNavigator} options={{ headerShown: false }} />
-
+      <Stack.Screen name={"MainTabNavigator"} component={MainTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name={"Chat"} component={ChatScreen} />
     </Stack.Navigator>
   );
 };

@@ -47,7 +47,7 @@ function RenderGoogleSignInButton() {
   
         console.log('Login realizado com sucesso!');
         Alert.alert('Login realizado com sucesso!');
-        navigation.navigate('Home');
+        navigation.navigate('MainTabNavigator');
       }
     } catch (error) {
       console.error('Erro ao fazer login com o Google:', error);

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth, database } from '../../../firebaseConfig';
-import LinearGradient from 'react-native-linear-gradient';
+const backImage = require("../../assets/logoW.png");
+
 
 
 const Home = () => {
@@ -28,7 +29,7 @@ const Home = () => {
 
     userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
-      console.log('userData:', userData); // Verifique se userData.profileImage está correto
+      //console.log('userData:', userData); // Verifique se userData.profileImage está correto
       if (userData && userData.profileImage && userData.name) {
         setUserProfileImage(userData.profileImage);
         setUsername(userData.name);
@@ -51,29 +52,17 @@ const Home = () => {
   const navigateToChat = (conversationId) => {
     navigation.navigate('Chat', { conversationId });
   };
-//colors={['#5FFBF1', '#00e4ff', '#44a4ff', '#c957ce', '#c348b5', '#cb3aab', '#d3279f', '#d90092', '#ea0074', '#f11256', '#f03737', '#e75312']}
+
   return (
     <View style={styles.container}>
-      {/* Cabeçalho com a imagem de perfil */}
-      <View >
-        <LinearGradient
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          colors={['#5FFBF1', '#00e4ff', '#44a4ff', '#c957ce', '#c348b5', '#cb3aab', '#d3279f', '#d90092', '#ea0074', '#f11256', '#f03737', '#e75312']}
-          style={styles.linearGradient}
-        >
-          <View style={styles.image}>
-            <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
-            <Text style={styles.textProfileName}>
-              {userName}
-            </Text>
-          </View>
-          <Text style={styles.textTitle}>
-            Mexagex
+      <View style={styles.linearGradient}>
+        <Image source={backImage} style={styles.logoImage} />
+        <View style={styles.image}>
+          <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
+          <Text style={styles.textProfileName}>
+            {userName}
           </Text>
-        </LinearGradient>
-
-
+        </View>
       </View>
 
       {/* Lista de conversas */}
@@ -92,38 +81,41 @@ const Home = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#E4E1DD',
   },
   linearGradient: {
     borderBottomLeftRadius: 60,
-    flexDirection: 'row-reverse'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#1B0A3E',
+    padding: 8,
   },
   profileImage: {
     marginTop: 15,
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: 'black',
     marginRight: 20,
   },
-  textProfileName: {
-    color: 'pink',
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginTop: 10,
-    marginRight: 10,
+  logoImage: {
+    width: 100,
+    height: 60,
+    marginLeft: 20,
+    resizeMode: 'contain',
   },
-  textTitle: {
-    color: 'white',
+  textProfileName: {
+    color: '#F10808',
     fontWeight: 'bold',
     fontSize: 20,
     marginTop: 10,
-    marginLeft: 10,
-    alignItems: 'flex-start'
   },
   image: {
     alignItems: 'flex-end',
   },
 })
+
 export default Home;

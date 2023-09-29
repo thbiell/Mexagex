@@ -186,7 +186,11 @@ const Contacts = () => {
             style={styles.contactItem}
             onPress={() => handleContactPress(item)} 
           >
+            {item.photoURL ? (
             <Image source={{ uri: item.photoURL }} style={styles.contactImage} />
+            ) : (
+              <Image source={require('../../assets/logo.png')} style={styles.userProfileImage} />
+              )}
             <View>
               <Text>{item.name}</Text>
               <Text>{item.email}</Text>

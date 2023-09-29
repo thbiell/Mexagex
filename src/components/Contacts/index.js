@@ -4,6 +4,7 @@ import { auth, database } from '../../../firebaseConfig';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import useConversationStore from '../../../reducer';
+import useFrienIdStoreStore from '../../../reducer';
 
 
 
@@ -114,7 +115,8 @@ const Contacts = () => {
         if (userData) {
           // Encontrou o usuário com o email selecionado
           const friendUid = Object.keys(userData)[0];
-  
+          useFrienIdStoreStore.setState({ friendId: friendUid });
+          //console.log(friendUid)
           // Gere um ID único para a conversa
           const conversationId1 = `${currentUid}${friendUid}`;
           const conversationId2 = `${friendUid}${currentUid}`;

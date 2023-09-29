@@ -37,15 +37,21 @@ const Home = () => {
     });
 
 
-    // Carregue a lista de conversas do usuário do Realtime Database
-    //const conversationsRef = database.ref(`users/${userUid}/conversations`);
-    //conversationsRef.on('value', (snapshot) => {
-    //  const conversationsData = snapshot.val();
-    //  if (conversationsData) {
-    //    const conversationsArray = Object.values(conversationsData);
-    //    setConversations(conversationsArray);
-    //  }
-    //});
+    // Consulta as conversas que contêm o UID do usuário atual
+const conversationsRef = database.ref('conversations');
+conversationsRef.on('value', (snapshot) => {
+  const conversationsData = snapshot.val();
+  if (conversationsData) {
+    const conversationsArray = Object.values(conversationsData);
+
+    // Filtra as conversas que contêm o UID do usuário atual
+    const userConversations = conversationsArray.filter((conversation) =>
+      conversation.includes(uid)
+    );
+
+    setConversations(userConversations);
+  }
+});
   }, []);
 
   // Função para navegar para a tela de chat quando uma conversa for selecionada

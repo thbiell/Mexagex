@@ -10,13 +10,25 @@ import {
 } from "react-native";
 import { auth, database } from "../../../firebaseConfig";
 import useConversationStore from "../../../reducer";
+import useFrienIdStoreStore from "../../../reducer";
 import { format } from "date-fns";
 import Icon from "react-native-vector-icons/FontAwesome6";
+import { useNavigation } from "@react-navigation/native";
+import { groupBy } from "lodash";
+
+
 
 const Chat = () => {
   const conversationId = useConversationStore((state) => state.conversationId);
+  const friendId = useFrienIdStoreStore((state) => state.friendId);
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [userName, setUsername] = useState("");
+  const navigation = useNavigation();
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   if (!conversationId) {
     return (
       <View>
@@ -40,7 +52,7 @@ const Chat = () => {
         const messagesArray = Object.values(messagesData).map((message) => ({
           ...message,
           // Converta o timestamp para uma string de data e hora legível
-          timestamp: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm:ss"),
+          timestamp: format(new Date(message.timestamp), "dd/MM/yy HH:mm"),
         }));
 
         // Ordene as mensagens pelo timestamp antes de renderizá-las
@@ -67,7 +79,7 @@ const Chat = () => {
     }
 
     // Carregue os dados do usuário (imagem de perfil) do Realtime Database
-    const userRef = database.ref(`users/${uid}`);
+    const userRef = database.ref(`users/${friendId}`);
 
     userRef.on("value", (snapshot) => {
       const userData = snapshot.val();
@@ -106,43 +118,38 @@ const Chat = () => {
     setNewMessage("");
   };
 
-  const renderMessage = ({ item }) => {
+  const renderMessage = ({ item, index }) => {
     // Verifique se a mensagem foi enviada pelo usuário atual
     const isCurrentUser = item.senderUid === uid;
 
     return (
-      <View
-        style={[
-          styles.messageContainer,
-          isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage,
-        ]}
-      >
-        <Text style={styles.messageText}>{item.text}</Text>
-        <Text style={styles.messageTimestamp}>{item.timestamp}</Text>
-      </View>
-    );
-  };
+        <View
+          style={[
+            styles.messageContainer,
+            isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage,
+          ]}
+          key={index} // Use o índice como chave, pois as mensagens têm o mesmo horário
+        >
+          <Text style={styles.messageText}>{item.text}</Text>
+          <Text style={styles.messageTimestamp}>{item.timestamp}</Text>
+        </View>
+      );
+    };
 
   return (
     <View style={styles.container}>
-      <View style={styles.linearGradient}>
-        <Icon
-          name="arrow-left-long"
-          color={"black"}
-          size={23}
-          style={styles.inputIcon}
-        />
-        <View style={styles.image}>
-          <Image
-            source={{ uri: userProfileImage }}
-            style={styles.profileImage}
-          />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={handleGoBack}>
+          <Icon name="arrow-left-long" color={"white"} size={23} style={styles.headerIcon} />
+        </TouchableOpacity>
+        <View style={styles.headerUserInfo}>
           <Text style={styles.textProfileName}>{userName}</Text>
+          <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
         </View>
       </View>
       <FlatList
         data={messages}
-        keyExtractor={(item) => `${item.timestamp}_${item.messageId}`}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderMessage}
         contentContainerStyle={styles.messagesContainer}
         inverted // Para exibir as mensagens mais recentes no topo
@@ -207,31 +214,42 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
-  linearGradient: {
-    borderBottomLeftRadius: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#1B0A3E",
-    padding: 8,
-  },
+
   profileImage: {
-    marginTop: 15,
     width: 60,
     height: 60,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "black",
-    marginRight: 20,
   },
   textProfileName: {
     color: "#F10808",
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: 10,
+    marginEnd: 20,
+  },
+  header: {
   },
   image: {
     alignItems: "flex-end",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#1B0A3E",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    height: 80, // Altura do cabeçalho personalizado
+    borderBottomLeftRadius: 60,
+  },
+  headerIcon: {
+    fontSize: 23,
+    color: "white",
+  },
+  headerUserInfo: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

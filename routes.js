@@ -69,7 +69,7 @@ const MainTabNavigator = () => {
 };
 const Routes = () => {
   return (
-    <Stack.Navigator initialRouteName={"Register"}>
+    <Stack.Navigator initialRouteName={MainTabNavigator}>
       <Stack.Screen name={"Register"} component={RegisterScreen} options={{ headerShown: false }} />
       <Stack.Screen name={"Login"} component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen name={"MainTabNavigator"} component={MainTabNavigator} options={{ headerShown: false }} />

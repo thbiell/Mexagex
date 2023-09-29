@@ -4,87 +4,143 @@ import { useNavigation } from '@react-navigation/native';
 import { auth, database } from '../../../firebaseConfig';
 const backImage = require("../../assets/logoW.png");
 import useConversationStore from '../../../reducer';
-
+import useFrienIdStore from '../../../reducer';
 
 const Home = () => {
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [userName, setUsername] = useState('');
   const [conversations, setConversations] = useState([]);
   const navigation = useNavigation();
-  // Função para carregar dados do usuário e conversas ao carregar a tela
+
   useEffect(() => {
-    // Verifique se o UID do usuário está disponível no módulo de autenticação
-    //const userUid = (`auth.currentUser.${uid}`);
     const uid = auth.currentUser.uid;
-    console.log(uid)
+
     if (!uid) {
-      // Lidar com a situação em que o UID do usuário não está disponível
       console.error('UID do usuário não encontrado.');
       return;
     }
 
-    // Carregue os dados do usuário (imagem de perfil) do Realtime Database
     const userRef = database.ref(`users/${uid}`);
-
 
     userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
-      //console.log('userData:', userData); // Verifique se userData.profileImage está correto
       if (userData && userData.profileImage && userData.name) {
         setUserProfileImage(userData.profileImage);
         setUsername(userData.name);
       }
     });
 
+    const conversationsRef = database.ref(`conversations`);
+    conversationsRef.on('value', (snapshot) => {
+      const conversationsData = snapshot.val();
+      if (conversationsData) {
+        const conversationsArray = Object.values(conversationsData);
+        const userConversations = conversationsArray.filter((conversation) =>
+          conversation.participants.includes(uid)
+        );
 
-    // Consulta as conversas que contêm o UID do usuário atual
-const conversationsRef = database.ref('conversations');
-conversationsRef.on('value', (snapshot) => {
-  const conversationsData = snapshot.val();
-  if (conversationsData) {
-    const conversationsArray = Object.values(conversationsData);
+        if (userConversations.length === 0) {
+          return;
+        }
+        const conversationsWithUserInfo = userConversations.map((conversation) => {
+          const otherUserId = conversation.participants.find((participantId) => participantId !== uid);
+          //console.log('teste', otherUserId)
+          const otherUserRef = database.ref(`users/${otherUserId}`);
+          const otherConversationId = conversation.id
+          return otherUserRef.once('value')
+            .then((otherUserSnapshot) => {
+              const otherUserData = otherUserSnapshot.val();
+              //console.log('friend id', otherUserData)
+              const updatedConversation = {
+                ...conversation,
+                otherUserId: otherUserId,
+                otherUserName: otherUserData.name,
+                otherUserProfileImage: otherUserData.profileImage,
+                id: otherConversationId
+              };
 
-    // Filtra as conversas que contêm o UID do usuário atual
-    const userConversations = conversationsArray.filter((conversation) =>
-      conversation.includes(uid)
-    );
+              const messages = conversation.messages;
+              if (messages) {
+                const messageKeys = Object.keys(messages);
+                const firstMessageKey = messageKeys[0]; 
+                const firstMessage = messages[firstMessageKey];
+                //console.log('primeira mensagem', firstMessage);
 
-    setConversations(userConversations);
-  }
-});
+                const messageDate = new Date(firstMessage.timestamp);
+
+                const day = messageDate.getDate().toString().padStart(2, '0');
+                const month = (messageDate.getMonth() + 1).toString().padStart(2, '0'); 
+                const year = messageDate.getFullYear().toString().slice(-2); 
+                const hours = messageDate.getHours().toString().padStart(2, '0'); 
+                const minutes = messageDate.getMinutes().toString().padStart(2, '0'); 
+
+                const formattedDateTime = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+                updatedConversation.firstMessage = firstMessage.text;
+                updatedConversation.firstMessageDateTime = formattedDateTime;
+              }
+
+              return updatedConversation;
+            });
+        });
+
+
+        Promise.all(conversationsWithUserInfo).then((conversationsWithInfo) => {
+          setConversations(conversationsWithInfo);
+        });
+      }
+    });
   }, []);
 
-  // Função para navegar para a tela de chat quando uma conversa for selecionada
-  const navigateToChat = (conversationId) => {
-    navigation.navigate('Chat', { conversationId });
+  const navigateToChat = (conversation, friendUid) => {
+    //console.log('id', conversation);
+    useFrienIdStore.setState({ friendId: friendUid });
+    useConversationStore.setState({ conversationId: conversation });
+    navigation.navigate('Chat');
   };
+
 
   return (
     <View style={styles.container}>
       <View style={styles.linearGradient}>
         <Image source={backImage} style={styles.logoImage} />
         <View style={styles.image}>
-          <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
+          {userProfileImage ? (
+            <Image source={{ uri: userProfileImage }} style={styles.profileImage} />
+          ) : (
+            <Image source={require('../../assets/logo.png')} style={styles.userProfileImage} />
+          )}
           <Text style={styles.textProfileName}>
             {userName}
           </Text>
         </View>
       </View>
-
-      {/* Lista de conversas */}
-      <FlatList
-        data={conversations}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigateToChat(item.id)}>
-            <Text>{item.name}</Text>
-            {/* Outras informações da conversa */}
-          </TouchableOpacity>
-        )}
-      />
+      {conversations.length === 0 ? (
+        <Text>Não há conversas disponíveis.</Text>
+      ) : (
+        <FlatList
+          data={conversations}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigateToChat(item.id, item.otherUserId)} style={styles.conversationItem}>
+              {item.otherUserProfileImage ? (
+                <Image source={{ uri: item.otherUserProfileImage }} style={styles.userProfileImage} />
+              ) : (
+                <Image source={require('../../assets/logo.png')} style={styles.userProfileImage} />
+              )}
+              <View style={styles.conversationInfo}>
+                <Text style={styles.conversationName}>{item.otherUserName}</Text>
+                <Text style={styles.lastMessage}>{item.firstMessage?(item.firstMessage):('Imagem ou arquivo')}</Text>
+                <Text style={styles.lastMessageDate}>{item.firstMessageDateTime}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -122,6 +178,36 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'flex-end',
   },
-})
+  conversationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  userProfileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  conversationInfo: {
+    marginLeft: 16,
+  },
+  conversationName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  lastMessage: {
+    fontSize: 16,
+    marginTop: 5,
+    color: '#581845',
+  },
+  lastMessageDate: {
+    fontSize: 14,
+    color: '#000',
+    marginLeft: 200
+  },
+});
 
 export default Home;

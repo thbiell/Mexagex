@@ -1,79 +1,177 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Mexagex <img src="https://github.com/thbiell/App-de-Mensagens/blob/main/src/assets/logoW.png" width="100">
 
-# Getting Started
+App React-Native CLI android, chat app, usando Realtime database e storage do Firebase.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+<img src="https://github.com/thbiell/App-de-Mensagens/blob/main/src/assets/logo.png" width="600">
 
-## Step 1: Start the Metro Server
+## Documentação do Projeto
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### Introdução
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- Mexagex é um app de troca de mensagens em tempo real, crie uma conta, adicione seus amigos e comece a conversar.
 
-```bash
-# using npm
-npm start
+- Este projeto tinha como objetivo um app de mensagens em tempo real, além de mensagens, você pode enviar imagens.
 
-# OR using Yarn
-yarn start
-```
+- Tecnologias usadas: React Native, Firebase.
 
-## Step 2: Start your Application
+### Configuração
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- Firebase
+  - Crie uma conta no Firebase. Se você não souber como fazer isso, siga o passo a passo no próprio site.
+  - Crie um projeto e adicione um aplicativo Android.
+  - Depois de criado, adicione o arquivo JSON em `android/app/src`.
 
-### For Android
+### Instalação
 
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
+Rode o comando no terminal dentro da pasta raiz do projeto Mexagex:
 
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+$ npm install
+# ou
+$ npm clean install
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+### Funcionalidades Principais
+1. Chat em Tempo Real
+O aplicativo oferece uma funcionalidade de chat em tempo real que permite aos usuários trocar mensagens instantâneas com outros usuários. Esta funcionalidade inclui:
 
-## Step 3: Modifying your App
+Envio de Mensagens de Texto: Os usuários podem digitar e enviar mensagens de texto para outros participantes da conversa.
+Envio de Imagens: Os usuários podem selecionar imagens da galeria do dispositivo e enviá-las como mensagens.
+Como Utilizar:
 
-Now that you have successfully run the app, let's modify it.
+Abra a conversa desejada.
+Digite sua mensagem no campo de texto na parte inferior da tela e toque em "Enviar" para enviar mensagens de texto.
+Para enviar uma imagem, toque no ícone da câmera na parte inferior da tela, selecione uma imagem da galeria e toque em "Enviar".
+2. Autenticação de Usuário
+O aplicativo possui um sistema de autenticação de usuário que permite que os usuários acessem suas contas de forma segura. Esta funcionalidade inclui:
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Registro de Conta: Novos usuários podem criar uma conta fornecendo informações básicas, como nome de usuário e senha.
+Login de Usuário: Usuários registrados podem fazer login em suas contas usando seu nome de usuário e senha.
+Como Utilizar:
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+Na tela inicial, toque em "Registrar" para criar uma nova conta ou em "Login" para acessar uma conta existente.
+Siga as instruções na tela para fornecer as informações necessárias, como nome de usuário e senha.
+3. Troca de Mensagens Offline
+Os usuários podem trocar mensagens mesmo quando estão offline. As mensagens offline serão enviadas assim que o dispositivo recuperar a conexão com a internet.
 
-## Congratulations! :tada:
+Como Utilizar:
 
-You've successfully run and modified your React Native App. :partying_face:
+Escreva e envie mensagens normalmente quando estiver online. As mensagens serão armazenadas localmente no dispositivo.
+As mensagens offline serão entregues automaticamente assim que o dispositivo estiver novamente online.
+4. Gerenciamento de Perfil de Usuário
+Os usuários podem personalizar seus perfis com informações pessoais, incluindo imagens de perfil e nomes de exibição.
 
-### Now what?
+Como Utilizar:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+Toque na sua imagem de perfil ou nome na parte superior da tela.
+Faça as alterações desejadas no seu perfil, como adicionar ou alterar sua imagem de perfil e nome de exibição.
+5. Lista de Conversas
+O aplicativo exibe uma lista de todas as conversas ativas dos usuários, permitindo que eles alternem facilmente entre diferentes chats.
 
-# Troubleshooting
+Como Utilizar:
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Na tela inicial, a lista de conversas ativas será exibida.
+Toque em uma conversa na lista para abri-la e visualizar o histórico de mensagens.
 
-# Learn More
 
-To learn more about React Native, take a look at the following resources:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### Fluxo de Dados
+
+#### Autenticação
+O Mexagex gerencia o fluxo de dados por meio de autenticação segura. O processo de autenticação envolve o seguinte fluxo:
+
+Registro de Conta: Os novos usuários podem criar uma conta fornecendo informações básicas, como nome de usuário e senha.
+
+Login de Usuário: Os usuários registrados podem fazer login em suas contas usando seu nome de usuário e senha.
+
+Chat
+O Mexagex permite a troca de mensagens em tempo real entre os usuários. O fluxo de dados no chat inclui:
+
+Envio de Mensagens de Texto: Os usuários podem digitar mensagens de texto e enviá-las para outros participantes da conversa.
+
+Envio de Imagens: Os usuários podem selecionar imagens da galeria de seus dispositivos e enviá-las como mensagens no chat.
+
+Mensagens Offline: O aplicativo permite que os usuários troquem mensagens mesmo quando estão offline. As mensagens offline são armazenadas localmente no dispositivo e enviadas automaticamente assim que o dispositivo se reconecta à internet.
+
+#### Autenticação
+Como funciona o processo de autenticação
+O processo de autenticação no Mexagex segue um fluxo simples:
+
+O usuário inicia o aplicativo e é apresentado com a tela de login ou registro.
+
+Para registrar uma nova conta, o usuário fornece um nome de usuário e uma senha. Para fazer login, o usuário insere seu nome de usuário e senha previamente registrados.
+
+O aplicativo verifica as credenciais do usuário com o Firebase Authentication para garantir a autenticidade.
+
+Se as credenciais forem válidas, o usuário é autenticado e tem acesso às funcionalidades do aplicativo.
+
+#### Fluxo de registro e login
+##### Registro de Conta:
+
+O usuário toca na opção "Registrar" na tela de início.
+O usuário fornece um nome de usuário e senha.
+O aplicativo envia as informações de registro para o Firebase Authentication.
+O Firebase Authentication cria uma nova conta para o usuário.
+O usuário é redirecionado para a tela principal do aplicativo e pode começar a usar as funcionalidades.
+##### Login de Usuário:
+
+O usuário toca na opção "Login" na tela de início.
+O usuário insere seu nome de usuário e senha.
+O aplicativo verifica as credenciais com o Firebase Authentication.
+Se as credenciais forem válidas, o usuário é autenticado e redirecionado para a tela principal.
+
+##### Chat
+Como as mensagens são enviadas e recebidas
+O Mexagex permite que os usuários enviem e recebam mensagens em tempo real. O fluxo de envio e recebimento de mensagens funciona da seguinte forma:
+
+O usuário inicia uma conversa com outro usuário selecionando-o na lista de amigos ou contatos.
+
+O usuário digita uma mensagem no campo de texto e toca em "Enviar".
+
+A mensagem é enviada para o Firebase Realtime Database, onde é armazenada em um local específico da conversa.
+
+O Firebase Realtime Database envia automaticamente a mensagem para o destinatário.
+
+O destinatário recebe a mensagem em tempo real e ela é exibida na conversa.
+
+Uso de imagens no chat
+Os usuários do Mexagex podem compartilhar imagens no chat:
+
+Para enviar uma imagem, o usuário toca no ícone da câmera na interface do chat.
+
+Isso abre a galeria de imagens do dispositivo, e o usuário pode selecionar uma imagem para enviar.
+
+A imagem é carregada para o Firebase Storage, e o URL da imagem é armazenado no Firebase Realtime Database.
+
+O destinatário recebe o URL da imagem e pode visualizá-la na conversa.
+
+Armazenamento em Nuvem
+Como os dados e arquivos são armazenados no Firebase Storage
+O Mexagex utiliza o Firebase Storage para armazenar imagens e arquivos compartilhados no chat. O armazenamento em nuvem funciona da seguinte forma:
+
+Quando um usuário envia uma imagem, o arquivo é carregado para o Firebase Storage com uma referência única.
+
+O URL de download é armazenado no Firebase Realtime Database junto com outras informações da mensagem.
+
+Quando um usuário deseja visualizar uma imagem, o aplicativo faz o download do conteúdo usando o URL fornecido pelo Firebase Storage.
+
+Banco de Dados em Tempo Real
+Como os dados são estruturados no Firebase Realtime Database
+O Firebase Realtime Database é usado pelo Mexagex para armazenar informações sobre usuários,
+
+
+### Estilo e Design
+#### O Mexagex apresenta um design limpo e amigável para os usuários, com foco na usabilidade e na experiência do usuário. Alguns dos aspectos de estilo e design incluem:
+
+ - Interface de Usuário Intuitiva: O aplicativo possui uma interface de usuário intuitiva que permite aos usuários navegar facilmente por suas conversas, enviar mensagens e compartilhar mídia.
+
+ - Paleta de Cores Agradável: O Mexagex utiliza uma paleta de cores agradável, incluindo tons de azul e branco para uma aparência moderna e atraente.
+
+ - Imagens de Perfil Personalizáveis: Os usuários podem personalizar suas imagens de perfil para tornar seu perfil único e reconhecível.
+
+ - Ícones e Elementos Visuais: O aplicativo utiliza ícones e elementos visuais para melhorar a usabilidade e tornar as ações do usuário mais claras.
+
+### Estrutura do banco de dados
+
+![image](https://github.com/thbiell/ExemplobranchExercicio/assets/101123186/80c66967-8df5-4eb5-a01a-57101525ec48)

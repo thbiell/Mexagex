@@ -4,7 +4,7 @@ import { auth, database } from '../../../firebaseConfig';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import useConversationStore from '../../../reducer';
-import useFrienIdStoreStore from '../../../reducer';
+import useFrienIdStore from '../../../reducer';
 
 
 
@@ -115,7 +115,7 @@ const Contacts = () => {
         if (userData) {
           // Encontrou o usuário com o email selecionado
           const friendUid = Object.keys(userData)[0];
-          useFrienIdStoreStore.setState({ friendId: friendUid });
+          useFrienIdStore.setState({ friendId: friendUid });
           //console.log(friendUid)
           // Gere um ID único para a conversa
           const conversationId1 = `${currentUid}${friendUid}`;
@@ -144,11 +144,13 @@ const Contacts = () => {
             // Crie uma nova conversa
             const conversationRef = database.ref(`conversations/${conversationId1}`);
             conversationRef.set({
-              participants: [currentUid, friendUid], // Adicione os participantes da conversa
+              participants: [currentUid, friendUid], 
+              id: conversationId1
             });
   
             // Vá para a nova conversa
             useConversationStore.setState({ conversationId: conversationId1 });
+            console.log(useConversationStore)
             navigation.navigate("Chat");
           }
         } else {

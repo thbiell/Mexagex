@@ -9,4 +9,4 @@ const useFrienIdStore = create((set) => ({
   setFriendId: (id) => set({ friendId: id }),
 }));
 
-export default useConversationStore;
+export default  useConversationStore;

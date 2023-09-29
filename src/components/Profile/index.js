@@ -39,7 +39,7 @@ const Profile = () => {
     try {
       const userRef = database.ref(`users/${uid}`);
 
-      let imageUrl = userProfileImage; // Defina uma URL padrão
+      let imageUrl = userProfileImage; 
 
       if (selectedImage) {
         const { uri } = renderImage;
@@ -94,7 +94,11 @@ const Profile = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleImageUpload}>
+        {selectedImage||userProfileImage ? (
           <Image source={{ uri: selectedImage || userProfileImage }} style={styles.profileImage} />
+          ) : (
+            <Image source={require('../../assets/logo.png')} style={styles.profileImage} />
+          )}
         </TouchableOpacity>
         <Text style={styles.textProfileName}>{userName}</Text>
       </View>

@@ -5,7 +5,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { ref, set, getDatabase, once } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -23,10 +23,10 @@ function RenderGoogleSignInButton() {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
   
       const result = await auth().signInWithCredential(googleCredential);
-  
+      
       if (result.user) {
         const { displayName, photoURL, uid, email } = result.user;
-  
+        AsyncStorage.setItem('userUid', uid)
         if (!(displayName || photoURL)) {
           throw new Error('Missing information from Google Account.');
         }

@@ -94,6 +94,10 @@ Envio de Imagens: Os usuários podem selecionar imagens da galeria de seus dispo
 
 Mensagens Offline: O aplicativo permite que os usuários troquem mensagens mesmo quando estão offline. As mensagens offline são armazenadas localmente no dispositivo e enviadas automaticamente assim que o dispositivo se reconecta à internet.
 
+##### Tem como mudar o tema automáticamente
+
+Basta você mudar de tema claro/escuro nas configurações do seu dispositivo.
+
 #### Autenticação
 Como funciona o processo de autenticação
 O processo de autenticação no Mexagex segue um fluxo simples:
@@ -174,4 +178,51 @@ O Firebase Realtime Database é usado pelo Mexagex para armazenar informações 
 
 ### Estrutura do banco de dados
 
-![image](https://github.com/thbiell/ExemplobranchExercicio/assets/101123186/80c66967-8df5-4eb5-a01a-57101525ec48)
+<img src="https://github.com/thbiell/ExemplobranchExercicio/assets/101123186/80c66967-8df5-4eb5-a01a-57101525ec48">
+
+### ScreenShots
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/3b681ea2-255e-4bf9-b3a4-e0c58471f99f" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/f935a756-b070-4c86-9126-380c774a3e8e" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/53b4b84c-25aa-44c2-80e1-8730d6826608" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/a26b9d61-d61a-4992-ad1b-3f4473dd8d2d" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/8fd8851d-140d-4cbf-8ebf-50ac89c03da0" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/2a830ae0-0a7a-45bd-99e2-24802c475a9a" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/88374405-a9f6-4c33-b574-b8dac2239668" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/fad29212-274b-4c00-bec2-df7148b2c10d" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/9859a8d3-f480-499d-ba6f-381294de49c6" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/34c76928-ce66-46a6-992a-1b2bd513d49a" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/cc1b5a05-49d8-4c8d-84b2-f44a67a3b57a" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/80599c1a-2115-4184-bc89-9a68ec3604df" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/38a190b0-cf46-412d-a295-5c4855b7e440" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/18add231-a363-47bb-a767-c1d9be2ae908" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/6ebff206-c418-4dde-a805-b75f860b6b9e" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/563e524b-cc9c-4942-b37f-568994286fd2" width="300">
+
+<img src="https://github.com/thbiell/App-de-Mensagens/assets/101123186/52c82f30-1388-459a-9a33-8e3aaac9394f" width="300">
+
+
+### Algumas features futuras
+
+ - Implementar grupos.
+ - fazer upload de arquivos e áudios.
+
+### Contato
+
+ - email: thiago007gabriel@gmail.com
+

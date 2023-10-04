@@ -3,13 +3,12 @@ import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import { ref, set, getDatabase, once } from '@react-native-firebase/database';
+import { ref, set, once } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isAuthStore } from '../../../reducer';
+import { database } from '../../../firebaseConfig';
 
-
-
-const database = getDatabase();
 GoogleSignin.configure({
   webClientId: '762711572558-eso25ngfuo9a3ncp9mpi20penne598bi.apps.googleusercontent.com',
 });
@@ -48,6 +47,7 @@ function RenderGoogleSignInButton() {
         console.log('Login realizado com sucesso!');
         Alert.alert('Login realizado com sucesso!');
         navigation.navigate('MainTabNavigator');
+        // isAuthStore.setIsAuthenticated(true);
       }
     } catch (error) {
       console.error('Erro ao fazer login com o Google:', error);

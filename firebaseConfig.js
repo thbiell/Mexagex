@@ -1,4 +1,3 @@
-import { AppRegistry } from 'react-native';
 import { initializeApp } from '@react-native-firebase/app';
 import { getAuth } from '@react-native-firebase/auth';
 import { getDatabase } from '@react-native-firebase/database';

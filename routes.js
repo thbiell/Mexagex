@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
@@ -11,6 +12,7 @@ import ProfileScreen from "./src/pages/Profile"
 import ConfigScreen from "./src/pages/Config"
 import ContactsScreen from "./src/pages/Contacts"
 import ChatScreen from "./src/pages/Chat"
+import { isAuthStore } from './reducer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -68,6 +70,10 @@ const MainTabNavigator = () => {
   );
 };
 const Routes = () => {
+  // const isAuthenticated = isAuthStore((state) => state.isAuthenticated);
+
+  // console.log('Está autenticado?', isAuthenticated);
+  // isAuthenticated ? "MainTabNavigator" : "Register"
   return (
     <Stack.Navigator initialRouteName={MainTabNavigator}>
       <Stack.Screen name={"Register"} component={RegisterScreen} options={{ headerShown: false }} />

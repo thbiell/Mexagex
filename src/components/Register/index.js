@@ -9,7 +9,6 @@ import * as ImagePicker from 'react-native-image-picker';
 import { set, getDatabase} from '@react-native-firebase/database';
 
 
-
 // Import do Firebase Realtime Database para o React Native
 const auth = getAuth(); // Obtém uma instância de autenticação
 const database = getDatabase();

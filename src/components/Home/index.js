@@ -3,14 +3,15 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react
 import { useNavigation } from '@react-navigation/native';
 import { auth, database } from '../../../firebaseConfig';
 const backImage = require("../../assets/logoW.png");
-import useConversationStore from '../../../reducer';
-import useFrienIdStore from '../../../reducer';
+import {useConversationStore, useFrienIdStore} from '../../../reducer';
+
 
 const Home = () => {
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [userName, setUsername] = useState('');
   const [conversations, setConversations] = useState([]);
   const navigation = useNavigation();
+
 
   useEffect(() => {
     const uid = auth.currentUser.uid;

@@ -9,8 +9,7 @@ import {
     StyleSheet,
 } from "react-native";
 import { auth, database, storage } from "../../../firebaseConfig";
-import useConversationStore from "../../../reducer";
-import useFrienIdStoreStore from "../../../reducer";
+import {useConversationStore, useFrienIdStore} from '../../../reducer';
 import { format } from "date-fns";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { useNavigation } from "@react-navigation/native";
@@ -22,7 +21,7 @@ import { set, getDatabase } from '@react-native-firebase/database';
 
 const Chat = () => {
     const conversationId = useConversationStore((state) => state.conversationId);
-    const friendId = useFrienIdStoreStore((state) => state.friendId);
+    const friendId = useFrienIdStore((state) => state.friendId);
     const [userProfileImage, setUserProfileImage] = useState(null);
     const [userName, setUsername] = useState("");
     const navigation = useNavigation();

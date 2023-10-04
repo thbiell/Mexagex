@@ -5,7 +5,7 @@ import { auth } from "../../../firebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import LoginWithGoogle from '../LoginWithGoogle'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { isAuthStore } from '../../../reducer';
 
 const backImage = require("../../assets/logo.png");
 const LoginWithEmail = () => {
@@ -25,6 +25,7 @@ const LoginWithEmail = () => {
               console.log('Login realizado com sucesso!');
 
               Alert.alert('Login realizado com sucesso!');
+              // isAuthStore.setIsAuthenticated(true);
               navigation.navigate('MainTabNavigator');
 
             })

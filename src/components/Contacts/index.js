@@ -3,7 +3,7 @@ import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, A
 import { auth, database } from '../../../firebaseConfig';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import {useConversationStore, useFrienIdStore, isAuthStore} from '../../../reducer';
+import {useConversationStore, useFrienIdStore} from '../../../reducer';
 
 
 

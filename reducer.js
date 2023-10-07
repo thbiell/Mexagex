@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { MMKV } from 'react-native-mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const useConversationStore = create((set) => ({
   conversationId: null,
@@ -12,26 +13,25 @@ const useFrienIdStore = create((set) => ({
   setFriendId: (id) => set({ friendId: id }),
 }));
 
-const mmkv = new MMKV();
-
-// Define the initial state for authentication
-const initialState = {
-  isAuthenticated: false,
-};
-
-const isAuthStore = create(
-  persist(
-    (set) => ({
-      ...initialState,
-      // Function to set the authentication state
-      setIsAuthenticated: (value) => set({ isAuthenticated: value }),
-    }),
-    {
-      // Store key in MMKV
-      name: 'isAuthStore',
-      // MMKV instance
-      adapter: mmkv,
+const userStateStore = create((set) => ({
+  authState: null,
+  setAuthState: async (authenticated) => {
+    set({ authState: authenticated });
+    // Persistir o estado de autenticação localmente
+    await AsyncStorage.setItem('authState', JSON.stringify(authenticated));
+  },
+  initializeAuthState: async () => {
+    // Recupere o estado de autenticação do AsyncStorage
+    const authState = await AsyncStorage.getItem('authState');
+  
+    // Se o valor não existir no AsyncStorage, defina-o como false por padrão
+    if (authState === null) {
+      await AsyncStorage.setItem('authState', JSON.stringify(false));
+      set({ authState: false });
+    } else {
+      set({ authState: JSON.parse(authState) });
     }
-  )
-);
-export { useConversationStore, useFrienIdStore, isAuthStore};
+  },
+}));
+
+export { useConversationStore, useFrienIdStore, userStateStore};

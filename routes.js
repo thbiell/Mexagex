@@ -12,7 +12,8 @@ import ProfileScreen from "./src/pages/Profile"
 import ConfigScreen from "./src/pages/Config"
 import ContactsScreen from "./src/pages/Contacts"
 import ChatScreen from "./src/pages/Chat"
-import { isAuthStore } from './reducer';
+import LoadingScreen from "./src/pages/Loading"
+import {userStateStore} from './reducer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -70,16 +71,19 @@ const MainTabNavigator = () => {
   );
 };
 const Routes = () => {
-  // const isAuthenticated = isAuthStore((state) => state.isAuthenticated);
+  const authState = userStateStore((state) => state.authState);
+  console.log('authstate:', authState)
 
-  // console.log('Está autenticado?', isAuthenticated);
-  // isAuthenticated ? "MainTabNavigator" : "Register"
+  if (authState === null) {
+    // Se o estado de autenticação ainda estiver sendo inicializado, exiba uma tela de carregamento
+    return <LoadingScreen />;
+  }
   return (
-    <Stack.Navigator initialRouteName={MainTabNavigator}>
-      <Stack.Screen name={"Register"} component={RegisterScreen} options={{ headerShown: false }} />
-      <Stack.Screen name={"Login"} component={LoginScreen} options={{ headerShown: false }} />
-      <Stack.Screen name={"MainTabNavigator"} component={MainTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name={"Chat"} component={ChatScreen} options={{ headerShown: false }}/>
+    <Stack.Navigator initialRouteName={authState === true ? 'MainTabNavigator': 'Register' }>
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MainTabNavigator" component={MainTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

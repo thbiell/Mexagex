@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import { ref, set, once } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { isAuthStore } from '../../../reducer';
+import { userStateStore } from '../../../reducer';
 import { database } from '../../../firebaseConfig';
 
 GoogleSignin.configure({
@@ -15,6 +15,7 @@ GoogleSignin.configure({
 
 function RenderGoogleSignInButton() {
   const navigation = useNavigation();
+  const setAuthState = userStateStore((state) => state.setAuthState);
   async function onGoogleButtonPress() {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -46,8 +47,9 @@ function RenderGoogleSignInButton() {
   
         console.log('Login realizado com sucesso!');
         Alert.alert('Login realizado com sucesso!');
+        await setAuthState(true);
         navigation.navigate('MainTabNavigator');
-        // isAuthStore.setIsAuthenticated(true);
+        
       }
     } catch (error) {
       console.error('Erro ao fazer login com o Google:', error);

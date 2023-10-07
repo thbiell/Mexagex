@@ -4,13 +4,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { signOut } from '@react-native-firebase/auth';
 import { auth, database } from '../../../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import { isAuthStore } from '../../../reducer';
+import { logoutUser } from '../../../AuthContext';
+import {userStateStore} from '../../../reducer';
 
 const Config = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [userName, setUsername] = useState('');
   const navigation = useNavigation();
+  const setAuthState = userStateStore((state) => state.setAuthState);
 
   useEffect(() => {
     const uid = auth.currentUser.uid;
@@ -34,7 +36,7 @@ const Config = () => {
     if (confirmLogout) {
       try {
         await signOut(auth);
-        // isAuthStore.setState({ isAuth: false });
+        await setAuthState(false);
         navigation.navigate('Register');
       } catch (error) {
         console.error('Erro ao fazer logout:', error);

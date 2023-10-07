@@ -5,13 +5,14 @@ import { auth } from "../../../firebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import LoginWithGoogle from '../LoginWithGoogle'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { isAuthStore } from '../../../reducer';
+import {userStateStore} from '../../../reducer';
 
 const backImage = require("../../assets/logo.png");
 const LoginWithEmail = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  const setAuthState = userStateStore((state) => state.setAuthState);
   const onHandleLogin = () => {
     if (email !== "" && password !== "") {
       signInWithEmailAndPassword(auth, email, password)
@@ -19,13 +20,13 @@ const LoginWithEmail = () => {
 
           const user = userCredential.user;
           const uid = user.uid;
+          
           AsyncStorage.setItem('userUid', uid)
             .then(() => {
               console.log('UID do usuário salvo no AsyncStorage');
               console.log('Login realizado com sucesso!');
-
               Alert.alert('Login realizado com sucesso!');
-              // isAuthStore.setIsAuthenticated(true);
+              setAuthState(true);
               navigation.navigate('MainTabNavigator');
 
             })
@@ -38,6 +39,7 @@ const LoginWithEmail = () => {
           console.error('Erro ao fazer login:', err);
           Alert.alert('Erro ao fazer login', err.message);
         });
+
     }
   };
 

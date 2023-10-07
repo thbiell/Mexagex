@@ -43,8 +43,24 @@ const Home = () => {
         if (userConversations.length === 0) {
           return;
         }
-        const conversationsWithUserInfo = userConversations.map((conversation) => {
-          const otherUserId = conversation.participants.find((participantId) => participantId !== uid);
+        const sortedConversations = userConversations.map((conversation) => {
+          const messages = conversation.messages;
+          if (messages) {
+            const messageKeys = Object.keys(messages);
+            const lastMessageKey = messageKeys[0]; // Última mensagem é a mais recente
+            const lastMessage = messages[lastMessageKey];
+            conversation.timestamp = lastMessage.timestamp; // Adicione um campo de timestamp
+          } else {
+            conversation.timestamp = 0; // Defina um valor padrão se não houver mensagens
+          }
+          return conversation;
+        });
+        
+        // Ordene as conversas por timestamp em ordem decrescente
+        sortedConversations.sort((a, b) => b.timestamp - a.timestamp);
+        
+        const conversationsWithUserInfo = sortedConversations.map((conversation) => {
+           const otherUserId = conversation.participants.find((participantId) => participantId !== uid);
           //console.log('teste', otherUserId)
           const otherUserRef = database.ref(`users/${otherUserId}`);
           const otherConversationId = conversation.id

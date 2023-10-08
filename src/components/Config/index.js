@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { signOut } from '@react-native-firebase/auth';
 import { auth, database } from '../../../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { logoutUser } from '../../../AuthContext';
 import {userStateStore} from '../../../reducer';
+import { styles } from './styles';
 
 const Config = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
@@ -79,47 +80,5 @@ const Config = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  profileContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-  },
-  profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 12,
-  },
-  infoContainer: {
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1B0A3E',
-    marginVertical: 30,
-  },
-  logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  logoutButtonText: {
-    fontSize: 18,
-    marginHorizontal: 15,
-    color: '#1B0A3E',
-  },
-});
 
 export default Config;

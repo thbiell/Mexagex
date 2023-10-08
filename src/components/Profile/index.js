@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import * as ImagePicker from 'react-native-image-picker';
 import { auth, database } from '../../../firebaseConfig';
 import { ref, getDownloadURL, putFile } from '@react-native-firebase/storage';
 import { update } from '@react-native-firebase/database';
 import { storage } from '../../../firebaseConfig';
+import { styles } from './styles';
 
 const defaultImageUrl = 'https://as2.ftcdn.net/v2/jpg/03/31/69/91/1000_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg';
 
@@ -119,62 +120,5 @@ const Profile = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#E4E1DD', 
-    
-  },
-  header: {
-    alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 80,
-    borderWidth: 2,
-    borderColor: 'white',
-  },
-  textProfileName: {
-    color: 'black', 
-    fontSize: 24,
-    marginTop: 16,
-    fontWeight: 'bold',
-  },
-  inputIcon: {
-    marginLeft: 4,
-  },
-  form: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 30,
-    marginBottom: 50,
-    backgroundColor: '#fff', 
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    marginLeft: 8,
-  },
-  button: {
-    backgroundColor: '#1B0A3E', 
-    height: 58,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textButton: {
-    fontWeight: 'bold',
-    color: 'white',
-    fontSize: 18,
-  },
-});
 
 export default Profile;

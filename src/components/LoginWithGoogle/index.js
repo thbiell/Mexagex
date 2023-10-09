@@ -11,7 +11,7 @@ import { database } from '../../../firebaseConfig';
 import {styles} from './styles'
 
 GoogleSignin.configure({
-  webClientId: '762711572558-eso25ngfuo9a3ncp9mpi20penne598bi.apps.googleusercontent.com',
+  webClientId: 'YOUR_PATH',
 });
 
 function RenderGoogleSignInButton() {

@@ -88,27 +88,28 @@ const Chat = () => {
     const [newMessage, setNewMessage] = useState("");
 
     useEffect(() => {
-        // Carregar mensagens da conversa
-        const messagesRef = database.ref(
-            `conversations/${conversationId}/messages`
-        );
-        messagesRef.on("value", (snapshot) => {
-            const messagesData = snapshot.val();
-            if (messagesData) {
-                const messagesArray = Object.values(messagesData).map((message) => ({
-                    ...message,
-                    // Converta o timestamp para uma string de data e hora legível
-                    timestamp: format(new Date(message.timestamp), "dd/MM/yy HH:mm"),
-                }));
-    
-                // Ordene as mensagens pelo timestamp antes de renderizá-las
-                messagesArray.sort((a, b) => a.timestamp - b.timestamp);
-    
-                setMessages(messagesArray);
-            }
-        });
-        // ...
-    }, [conversationId]);
+    // Carregar mensagens da conversa
+    const messagesRef = database.ref(
+        `conversations/${conversationId}/messages`
+    );
+    messagesRef.on("value", (snapshot) => {
+        const messagesData = snapshot.val();
+        if (messagesData) {
+            const messagesArray = Object.values(messagesData);
+
+            // Ordene as mensagens pelo timestamp em ordem decrescente
+            messagesArray.sort((a, b) => b.timestamp - a.timestamp);
+
+            // Formate o timestamp das mensagens
+            messagesArray.forEach((message) => {
+                message.timestamp = format(new Date(message.timestamp), "dd/MM/yy HH:mm");
+            });
+
+            setMessages(messagesArray);
+        }
+    });
+    // ...
+}, [conversationId]);
     
     useEffect(() => {
         // Verifique se o UID do usuário está disponível no módulo de autenticação

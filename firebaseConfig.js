@@ -6,13 +6,13 @@ import { getStorage } from '@react-native-firebase/storage';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBNPOtZklfn_BQOmnggvss2DjQW_IjZScg",
-  authDomain: "messageproject-a3d23.firebaseapp.com",
-  databaseURL: "https://messageproject-a3d23-default-rtdb.firebaseio.com",
-  projectId: "messageproject-a3d23",
-  storageBucket: "messageproject-a3d23.appspot.com",
-  messagingSenderId: "762711572558",
-  appId: "1:762711572558:android:0a1448440bb14867fb431f",
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PATH.firebaseapp.com",
+  databaseURL: "YOUR_PATH.firebaseio.com",
+  projectId: "YOUR_ID",
+  storageBucket: "YOUR_PATH",
+  messagingSenderId: "YOUR_ID",
+  appId: "id",
 };
 
 // Inicialize o Firebase com a configuração
